@@ -42,6 +42,7 @@ def scrape_committees():
     for header in _headers:
         portfolios = []
         for comm in header.findNext('div').find_all('div', {'class': 'box'}):
+            _committee = comm.find('strong').text
             for comm_name in comm.find('ul').find_all('li'):
                 portfolios.append(comm_name.text)
         _date = ""
@@ -50,6 +51,6 @@ def scrape_committees():
         except:
             _date = convert_to_ios_date(header.text.replace('\xa0', ' '))
 
-        hearing_list.append({'date': str(_date), 'portfolios': portfolios})
+        hearing_list.append({'committee': _committee, 'date': str(_date), 'portfolios': portfolios})
     return hearing_list
         
