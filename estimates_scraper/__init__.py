@@ -21,9 +21,18 @@ my_months = {
     "December": 12,
 }
 
+class WhatDateError(Exception):
+    pass
+
 def convert_to_ios_date(date_string: str, year: int = 2021):
-    date_string_list = date_string.split()
-    return(datetime.date(year, my_months[date_string_list[2]], int(date_string_list[1])))
+    date_string_list = date_string.split()[1:]
+    date_string_list = date_string_list # keeping this for fun
+    if date_string_list[0] in my_months.keys():
+        return(datetime.date(year, my_months[date_string_list[0]], int(date_string_list[1])))
+    elif  date_string_list[1] in my_months.keys():
+        return(datetime.date(year, my_months[date_string_list[1]], int(date_string_list[0])))
+    else:
+        raise WhatDateError(f"can't identify the date: {date_string}")
 
 def scrape_committees():
     _soup = BeautifulSoup(get(URL).text, 'lxml')
@@ -35,13 +44,12 @@ def scrape_committees():
         for comm in header.findNext('div').find_all('div', {'class': 'box'}):
             for comm_name in comm.find('ul').find_all('li'):
                 portfolios.append(comm_name.text)
-            print(portfolios)
-        
+        _date = ""
         try:
-
-            _date = header.find('br').nextSibling.strip().replace('\xa0', ' ')
+            _date = convert_to_ios_date(header.find('br').nextSibling.strip().replace('\xa0', ' '))
         except:
-            _date = header.text.replace('\xa0', ' ')
-        hearing_list.append({'date': _date, 'portfolios': portfolios})
+            _date = convert_to_ios_date(header.text.replace('\xa0', ' '))
+
+        hearing_list.append({'date': str(_date), 'portfolios': portfolios})
     return hearing_list
         
