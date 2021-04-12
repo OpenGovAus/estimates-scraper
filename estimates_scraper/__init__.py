@@ -21,9 +21,9 @@ my_dates = {
     "December": 12,
 }
 
-def convert_to_ios_date(date_string: str):
+def convert_to_ios_date(date_string: str, year: int = 2021):
     date_string_list = date_string.split()
-    return(datetime.date(2021, my_dates[date_string_list[2]], int(date_string_list[1])))
+    return(datetime.date(year, my_dates[date_string_list[2]], int(date_string_list[1])))
 
 def scrape_committees():
     _headers = BeautifulSoup(get(URL).text, 'lxml').find('div', {'_rdeditor_temp': '1'}).find_all('h3')
@@ -32,7 +32,7 @@ def scrape_committees():
         try:
             date_string = header.find('br').nextSibling.strip().replace('\xa0', ' ')
             _dates.append(date_string)
-            convert_to_ios_date(date_string)
+            print(convert_to_ios_date(date_string))
 
         except:
             _dates.append(header.text.replace('\xa0', ' '))
