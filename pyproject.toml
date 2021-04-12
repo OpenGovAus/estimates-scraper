@@ -8,6 +8,7 @@ authors = ["king-millez <Millez.Dev@gmail.com>"]
 python = "^3.8"
 requests = "^2.25.1"
 bs4 = "^0.0.1"
+lxml = "^4.6.3"
 
 [tool.poetry.dev-dependencies]
 
