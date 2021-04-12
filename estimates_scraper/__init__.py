@@ -6,7 +6,7 @@ import datetime
 URL = 'https://www.aph.gov.au/Parliamentary_Business/Senate_estimates/Next_hearings'
 
 
-my_dates = {
+my_months = {
     "January": 1,
     "February": 2,
     "March": 3,
@@ -23,7 +23,7 @@ my_dates = {
 
 def convert_to_ios_date(date_string: str, year: int = 2021):
     date_string_list = date_string.split()
-    return(datetime.date(year, my_dates[date_string_list[2]], int(date_string_list[1])))
+    return(datetime.date(year, my_months[date_string_list[2]], int(date_string_list[1])))
 
 def scrape_committees():
     _headers = BeautifulSoup(get(URL).text, 'lxml').find('div', {'_rdeditor_temp': '1'}).find_all('h3')
